@@ -2,7 +2,8 @@ mod reader;
 
 mod day1;
 mod day2;
+mod day3;
 
 fn main() {
-    day2::solve::solve().expect("We failed");
+    day3::solve::solve().expect("We failed");
 }
