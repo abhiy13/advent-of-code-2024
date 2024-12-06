@@ -39,15 +39,6 @@ impl Direction {
             Direction::Left => (0, -1),
         }
     }
-
-    fn get_str(&self) -> &str {
-        match self {
-            Direction::Up => "U",
-            Direction::Right => "R",
-            Direction::Down => "D",
-            Direction::Left => "L",
-        }
-    }
 }
 
 fn get_start(matrix: &Vec<Vec<char>>) -> ((i32, i32), Direction) {
@@ -58,23 +49,19 @@ fn get_start(matrix: &Vec<Vec<char>>) -> ((i32, i32), Direction) {
             }
         }
     }
-    panic!("NO start found");
+    panic!("No start found");
 }
-
-const MAX_ITER_TIMES: i32 = 100_00;
 
 fn get_visits(matrix: &Vec<Vec<char>>, start: ((i32, i32), Direction)) -> (i32, bool) {
     let ((mut currx, mut curry), mut direction) = start;
     let mut visisted = HashSet::<(i32, i32)>::new();
-    let mut detect_loop = HashSet::<(i32, i32, String)>::new();
-    let mut num_times = 0;
+    let mut detect_loop = HashSet::<(i32, i32, Direction)>::new();
 
     loop {
-        if detect_loop.contains(&(currx, curry, direction.clone().get_str().to_string())) {
+        if detect_loop.contains(&(currx, curry, direction.clone())) {
             return (-1, true);
         }
-        // println!("{}", num_times);
-        detect_loop.insert((currx, curry, direction.clone().get_str().to_string()));
+        detect_loop.insert((currx, curry, direction.clone()));
         visisted.insert((currx, curry));
         let (nx, ny) = direction.get_move();
         currx += nx;
@@ -91,7 +78,6 @@ fn get_visits(matrix: &Vec<Vec<char>>, start: ((i32, i32), Direction)) -> (i32, 
             curry -= ny;
             direction = direction.next_direction();
         }
-        num_times += 1;
     }
     return (visisted.len() as i32, false);
 }
